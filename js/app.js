@@ -629,7 +629,7 @@ const bgImageSelect = document.getElementById("pageBackgroundImage");
   // --- LÓGICA DE BANNERS DINÁMICOS (Página 3) ---
   let bannerData = [
     {
-      puntoNum: "8570", puntoName: "LAS DELICIAS COMUNEROS",
+      puntoNum: "1234", puntoName: "LOS COMUNEROS",
       userRole: "ASESORA DE COMISIÓN", userName: "ANDREA CASTELLANOS", userId: "CC 12345678",
       faltanteNum: "67", faltanteType: "RASPAS", valor: "$155.000"
     }
@@ -1575,10 +1575,8 @@ function renderDynSidebar() {
   let page6Data = {
     enabled: false,
     title: "TITULO",
-    columns: ["Columna 1", "Columna 2"], // Nombres de las columnas
-    rows: [
-      ["Dato 1", "Dato 2"] // Valores de las filas (cada fila es un arreglo)
-    ]
+    columns: [], // Se define desde la tabla pegada de Excel
+    rows: []     // Se define desde la tabla pegada de Excel
   };
 
   const p6SidebarContainer = document.getElementById("page6SidebarContainer");
@@ -1632,6 +1630,118 @@ function renderDynSidebar() {
     titleInput.oninput = (e) => { page6Data.title = e.target.value; renderPage6Preview(); };
     titleWrap.appendChild(titleInput);
     p6SidebarContainer.appendChild(titleWrap);
+
+    // 2.5 IMPORTAR TABLA DESDE EXCEL (PEGAR)
+    const pasteSection = document.createElement("div");
+    pasteSection.className = "field";
+    pasteSection.style.background = "rgba(16,185,129,0.06)";
+    pasteSection.style.padding = "10px";
+    pasteSection.style.borderRadius = "8px";
+    pasteSection.style.border = "1px dashed #10b981";
+    pasteSection.style.marginBottom = "15px";
+
+    const pasteLabel = document.createElement("label");
+    pasteLabel.textContent = "Pegar desde Excel";
+    pasteLabel.style.fontWeight = "600";
+    pasteSection.appendChild(pasteLabel);
+
+    const pasteHint = document.createElement("p");
+    pasteHint.textContent = "Copia el rango en Excel (incluyendo encabezados si quieres usarlos como nombres de columna) y pégalo aquí.";
+    pasteHint.style.fontSize = "11px";
+    pasteHint.style.color = "#666";
+    pasteHint.style.margin = "2px 0 8px";
+    pasteSection.appendChild(pasteHint);
+
+    const pasteArea = document.createElement("textarea");
+    pasteArea.id = "page6PasteArea";
+    pasteArea.rows = 4;
+    pasteArea.placeholder = "Selecciona el rango en Excel, copia (Ctrl+C) y pega aquí (Ctrl+V)...";
+    pasteSection.appendChild(pasteArea);
+
+    const pasteOptionsWrap = document.createElement("div");
+    pasteOptionsWrap.style.display = "flex";
+    pasteOptionsWrap.style.alignItems = "center";
+    pasteOptionsWrap.style.gap = "8px";
+    pasteOptionsWrap.style.marginTop = "8px";
+    pasteOptionsWrap.style.flexWrap = "wrap";
+
+    const hasHeaderLabel = document.createElement("label");
+    hasHeaderLabel.style.display = "flex";
+    hasHeaderLabel.style.alignItems = "center";
+    hasHeaderLabel.style.gap = "6px";
+    hasHeaderLabel.style.fontSize = "12px";
+    hasHeaderLabel.style.margin = "0";
+    hasHeaderLabel.style.cursor = "pointer";
+    const hasHeaderCheckbox = document.createElement("input");
+    hasHeaderCheckbox.type = "checkbox";
+    hasHeaderCheckbox.id = "page6PasteHasHeader";
+    hasHeaderCheckbox.checked = true;
+    hasHeaderCheckbox.style.width = "auto";
+    hasHeaderLabel.append(hasHeaderCheckbox, "La primera fila es encabezado");
+
+    pasteOptionsWrap.append(hasHeaderLabel);
+    pasteSection.appendChild(pasteOptionsWrap);
+
+    const pasteBtn = document.createElement("button");
+    pasteBtn.textContent = "Importar tabla a Página 6";
+    pasteBtn.type = "button";
+    pasteBtn.className = "btn btn-secondary";
+    pasteBtn.style.width = "100%";
+    pasteBtn.style.padding = "8px";
+    pasteBtn.style.marginTop = "10px";
+    pasteBtn.style.fontSize = "13px";
+    pasteBtn.onclick = () => {
+      const text = pasteArea.value;
+      if (!text || !text.trim()) {
+        alert("Primero pega las filas copiadas desde Excel en el cuadro de texto.");
+        return;
+      }
+
+      let rows = text
+        .split(/\r?\n/)
+        .map(r => r.replace(/\r/g, ""))
+        .filter(r => r.trim().length > 0)
+        .map(r => r.split("\t").map(c => c.trim()));
+
+      if (rows.length === 0) {
+        alert("No se detectaron filas válidas para importar.");
+        return;
+      }
+
+      const useHeader = hasHeaderCheckbox.checked;
+
+      let headerRow = null;
+      if (useHeader) {
+        headerRow = rows[0];
+        rows = rows.slice(1);
+      }
+
+      if (rows.length === 0) {
+        alert("No se detectaron filas de datos para importar (solo se encontró el encabezado).");
+        return;
+      }
+
+      // Las columnas y filas de la tabla se toman completamente de lo pegado desde Excel.
+      const colCount = Math.max(
+        headerRow ? headerRow.length : 0,
+        ...rows.map(r => r.length)
+      );
+
+      page6Data.columns = headerRow
+        ? Array.from({ length: colCount }, (_, i) => headerRow[i] || `Columna ${i + 1}`)
+        : Array.from({ length: colCount }, (_, i) => `Columna ${i + 1}`);
+
+      page6Data.rows = rows.map(r => {
+        const padded = r.slice(0, colCount);
+        while (padded.length < colCount) padded.push("");
+        return padded;
+      });
+
+      renderPage6();
+    };
+    pasteSection.appendChild(pasteBtn);
+
+    p6SidebarContainer.appendChild(pasteSection);
 
     // 3. SECCIÓN COLUMNAS
     const colSection = document.createElement("div");
