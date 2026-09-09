@@ -1189,6 +1189,13 @@ input:focus, textarea:focus, select:focus {
   color: var(--table-cell-text);
 }
 
+/* Filas invisibles usadas solo para igualar la altura entre la tabla
+   izquierda y la derecha cuando tienen distinta cantidad de datos. */
+.dynamic-table-filler-row td {
+  border-bottom: 1px solid transparent;
+  color: transparent;
+  user-select: none;
+}
 
 .dynamic-page-editor {
   background: #f8fafc;

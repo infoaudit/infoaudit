@@ -783,6 +783,64 @@ const bgImageSelect = document.getElementById("pageBackgroundImage");
     renderBannerData();
   });
 
+  // --- IMPORTAR BANNERS DESDE EXCEL (PEGAR TABLA) ---
+  const bannerPasteArea = document.getElementById("bannerPasteArea");
+  const bannerPasteBtn = document.getElementById("bannerPasteBtn");
+  const bannerPasteHasHeader = document.getElementById("bannerPasteHasHeader");
+  const bannerPasteReplace = document.getElementById("bannerPasteReplace");
+
+  function parseBannerPasteText(text) {
+    // Excel copia las filas separadas por salto de línea y las columnas por tabulación.
+    let rows = text
+      .split(/\r?\n/)
+      .map(r => r.replace(/\r/g, ""))
+      .filter(r => r.trim().length > 0);
+
+    if (bannerPasteHasHeader && bannerPasteHasHeader.checked && rows.length > 0) {
+      rows = rows.slice(1);
+    }
+
+    return rows.map(rowText => {
+      const cells = rowText.split("\t").map(c => c.trim());
+      return {
+        puntoNum: cells[0] || "0",
+        puntoName: cells[1] || "",
+        userRole: cells[2] || "",
+        userName: cells[3] || "",
+        userId: cells[4] || "",
+        faltanteNum: cells[5] || "0",
+        faltanteType: cells[6] || "",
+        valor: cells[7] || "$0"
+      };
+    });
+  }
+
+  if (bannerPasteBtn) {
+    bannerPasteBtn.addEventListener("click", () => {
+      const text = bannerPasteArea.value;
+      if (!text || !text.trim()) {
+        alert("Primero pega las filas copiadas desde Excel en el cuadro de texto.");
+        return;
+      }
+
+      const parsedRows = parseBannerPasteText(text);
+
+      if (parsedRows.length === 0) {
+        alert("No se detectaron filas válidas para importar.");
+        return;
+      }
+
+      if (bannerPasteReplace.checked) {
+        bannerData = parsedRows;
+      } else {
+        bannerData = bannerData.concat(parsedRows);
+      }
+
+      bannerPasteArea.value = "";
+      renderBannerData();
+    });
+  }
+
   renderBannerData();
 
   // --- LÓGICA DE PÁGINAS DINÁMICAS (MÚLTIPLES TABLAS) ---
@@ -1103,7 +1161,18 @@ function renderDynSidebar() {
       const gridContainer = document.createElement("div");
       gridContainer.className = "grid-page-container";
 
-      page.tables.forEach(table => {
+      // El grid muestra las tablas de a 2 por fila (izquierda/derecha).
+      // Para que ambas tarjetas de una misma fila queden con la misma
+      // altura, calculamos cuántas filas tiene la tabla más larga de
+      // cada pareja y rellenamos la más corta con filas invisibles.
+      const rowsPerPair = 2;
+      const maxRowsByPair = [];
+      page.tables.forEach((table, tIdx) => {
+        const pairIdx = Math.floor(tIdx / rowsPerPair);
+        maxRowsByPair[pairIdx] = Math.max(maxRowsByPair[pairIdx] || 0, table.rows.length);
+      });
+
+      page.tables.forEach((table, tIdx) => {
         const card = document.createElement("div");
         card.className = "dynamic-table-card";
         
@@ -1137,6 +1206,21 @@ function renderDynSidebar() {
           });
           tbody.appendChild(tr);
         });
+
+        // Filas de relleno (invisibles) para igualar la altura con la
+        // tabla vecina de la misma fila del grid.
+        const pairIdx = Math.floor(tIdx / rowsPerPair);
+        const fillerCount = (maxRowsByPair[pairIdx] || 0) - table.rows.length;
+        for (let f = 0; f < fillerCount; f++) {
+          const fillerTr = document.createElement("tr");
+          fillerTr.className = "dynamic-table-filler-row";
+          table.columns.forEach(() => {
+            const td = document.createElement("td");
+            td.innerHTML = "&nbsp;";
+            fillerTr.appendChild(td);
+          });
+          tbody.appendChild(fillerTr);
+        }
 
         tableEl.appendChild(thead);
         tableEl.appendChild(tbody);

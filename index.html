@@ -386,6 +386,27 @@
       <!-- Controles del Banner de 4 Columnas (DINÁMICO) -->
       <div>
         <h3 style="font-size: 0.95rem; margin-bottom: 12px; color: #333;">Indicador</h3>
+
+        <!-- Importar desde Excel -->
+        <div class="field" style="background: rgba(138,63,252,0.06); padding: 10px; border-radius: 8px; border: 1px dashed #8a3ffc; margin-bottom: 14px;">
+          <label for="bannerPasteArea" style="font-weight: 600;">Pegar desde Excel</label>
+          <p style="font-size: 11px; color: #666; margin: 2px 0 8px;">
+            Columnas en este orden: Punto (Num), Punto (Nombre), Cargo, Nombre, Documento, Faltante (Num), Faltante (Tipo), Valor Total.
+          </p>
+          <textarea id="bannerPasteArea" rows="4" placeholder="Selecciona el rango en Excel, copia (Ctrl+C) y pega aquí (Ctrl+V)..."></textarea>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; margin: 0; cursor: pointer;">
+              <input type="checkbox" id="bannerPasteHasHeader" checked style="width: auto;">
+              La primera fila es encabezado
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; margin: 0; cursor: pointer;">
+              <input type="checkbox" id="bannerPasteReplace" style="width: auto;">
+              Reemplazar banners existentes
+            </label>
+          </div>
+          <button class="btn btn-secondary" id="bannerPasteBtn" type="button" style="width: 100%; padding: 8px; margin-top: 10px; font-size: 13px;">Importar filas a Banners</button>
+        </div>
+
         <button class="btn btn-secondary" id="addBannerBtn" type="button" style="width: 100%; padding: 8px; margin-bottom: 12px; font-size: 13px;">+ Agregar Nuevo Banner</button>
         <div id="bannerSidebarGrid" style="display: grid; gap: 16px;"></div>
       </div>
