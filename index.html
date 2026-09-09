@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Info-Audit</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="icon" type="image/png" href="media/favicon.png">
+</head>
+<body>
+  <main class="app">
+<aside class="editor">
+  <h1>Info-Audit</h1>
+  <nav class="sidebar-tabs">
+    <button class="tab-btn active" data-target="sec-estilos">Estilos</button>
+    <button class="tab-btn" data-target="sec-pag1">Portada</button>
+    <button class="tab-btn" data-target="sec-pag2">Aspectos</button>
+    <button class="tab-btn" data-target="sec-pag3">Tangibles</button>
+    <button class="tab-btn" data-target="sec-pag4">Evidencia</button>
+    <button class="tab-btn" data-target="sec-pag5">Asp. Norm.</button>
+    <button class="tab-btn" data-target="sec-pag6">Tabla General</button>
+    <button class="tab-btn" data-target="sec-pag7">Recomendaciones</button>
+  </nav>
+
+  <!-- ================= SECCIÓN GENERAL (ESTILOS) ================= -->
+  <section id="sec-estilos" class="group tab-content active-tab">
+    <h2 class="group-title" style="border-bottom: 2px solid var(--accent); padding-bottom: 5px;">Personalización Visual</h2>
+    
+    <div class="field">
+      <label>Fondo de las páginas</label>
+      <select id="pageBackgroundImage">
+        <option value="">Sin fondo</option>
+        <option value="media/fondo.png">Diseño RSNS 1</option>
+        <option value="media/fondo2.png">Diseño RSNS 2</option>
+        <option value="media/fondo3.png">Diseño RSNS 3</option>
+        <option value="media/fondo4.png">Diseño RSNS 4</option>
+        <option value="media/fondo5.png">Diseño RSNS 5</option>
+        <option value="media/fondo6.png">Diseño RSNS 6</option>
+        <option value="media/fondo7.png">Diseño RSNS 7</option>
+        <option value="media/fondo8.png">Diseño RSNS 8</option>
+        <option value="media/fondo10.png">Diseño RSNS 9</option>
+        <option value="media/fondo11.png">Diseño RSNS 10</option>
+        <option value="media/fondo12.png">Diseño SuperGiros 1</option>
+        <option value="media/fondo14.png">Diseño Chance Legal</option>
+        <option value="media/fondo15.png">Diseño BetPlay 2</option>
+        <option value="media/fondo16.png">Diseño Raspa</option>
+      </select>
+    </div>
+
+    <!-- Acordeón 2: Colores Generales -->
+    <details class="style-accordion">
+      <summary>Colores Principales</summary>
+      <div class="accordion-content">
+      <div class="split">
+        <div class="field">
+          <label for="metaColor">Color N° informe / fecha</label>
+          <input id="metaColor" type="color" value="#555555">
+        </div>
+        <div class="field">
+          <label for="metaSize">Tamaño (px)</label>
+          <input id="metaSize" type="number" min="8" max="24" step="1" value="14">
+        </div>
+      </div>
+        <div class="field">
+          <label for="accent">Principal</label>
+          <input id="accent" type="color" value="#1d4ed8">
+        </div>
+        <div class="field">
+          <label for="soft">Color suave</label>
+          <input id="soft" type="color" value="#dbeafe">
+        </div>
+        <div class="field">
+          <label for="kpiTitleColor">Títulos</label>
+          <input id="kpiTitleColor" type="color" value="#06135f">
+        </div>
+      </div>
+    </details>
+
+    <!-- Acordeón 3: Tarjetas y Métricas -->
+    <details class="style-accordion">
+      <summary>Tarjetas de Aspectos</summary>
+      <div class="accordion-content">
+        <div class="field">
+          <label for="kpiNumberBg">Borde tarjeta aspecto</label>
+          <input id="kpiNumberBg" type="color" value="#ffe169">
+        </div>
+        <div class="split">
+          <div class="field">
+            <label for="aspectCardBg">Color de fondo</label>
+            <input id="aspectCardBg" type="color" value="#0b4290">
+          </div>
+          <div class="field">
+            <label for="aspectCardText">Color de letra</label>
+            <input id="aspectCardText" type="color" value="#ffffff">
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Acordeón 4: Tipografía e Imágenes -->
+    <details class="style-accordion">
+      <summary>Tipografía</summary>
+      <div class="accordion-content">
+        <div class="field">
+          <label for="fontChoice">Tipo de letra principal</label>
+          <select id="fontChoice">
+    <option value="Inter, 'Segoe UI', Arial, sans-serif">Inter</option>
+    <option value="'Roboto', sans-serif">Roboto</option>
+    <option value="'Open Sans', sans-serif">Open Sans</option>
+    <option value="'Montserrat', sans-serif">Montserrat</option>
+    <option value="'Poppins', sans-serif">Poppins</option>
+    <option value="'Lato', sans-serif">Lato</option>
+    <option value="'Raleway', sans-serif">Raleway</option>
+    <option value="'Nunito', sans-serif">Nunito</option>
+    <option value="'Work Sans', sans-serif">Work Sans</option>
+    <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+    <option value="Arial, Helvetica, sans-serif">Arial</option>
+    
+    <!-- Serif Clásicas y Editoriales -->
+    <option value="Georgia, serif">Georgia</option>
+    <option value="'Times New Roman', Times, serif">Times New Roman</option>
+    <option value="'Playfair Display', serif">Playfair Display</option>
+    <option value="'Merriweather', serif">Merriweather</option>
+    <option value="'Lora', serif">Lora</option>
+    <option value="'Baskerville', serif">Baskerville</option>
+
+    <!-- Monoespaciadas y Técnicas -->
+    <option value="'Fira Code', monospace">Fira Code</option>
+    <option value="'Courier New', Courier, monospace">Courier New</option>
+    <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+    
+    <!-- Tradicionales -->
+    <option value="Verdana, Geneva, sans-serif">Verdana</option>
+    <option value="'Trebuchet MS', Arial, sans-serif">Trebuchet MS</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="bgImageUpload">Cargar imagen de fondo</label>
+          <input id="bgImageUpload" type="file" accept="image/*">
+        </div>
+      </div>
+    </details>
+
+    <!-- Acordeón 5: Títulos, párrafos y span -->
+    <details class="style-accordion">
+      <summary>Títulos, Párrafos y Span</summary>
+      <div class="accordion-content">
+        <div class="field">
+          <label for="titleScale">Tamaño de títulos</label>
+          <div class="range-field">
+            <input id="titleScale" type="range" min="0.7" max="1.5" step="0.05" value="1">
+            <output id="titleScaleValue">100%</output>
+          </div>
+        </div>
+        <div class="split">
+          <div class="field">
+            <label for="paragraphColor">Color de párrafos</label>
+            <input id="paragraphColor" type="color" value="#1f2937">
+          </div>
+          <div class="field">
+            <label for="paragraphSize">Tamaño de párrafos (px)</label>
+            <input id="paragraphSize" type="number" min="10" max="24" step="1" value="13">
+          </div>
+        </div>
+        <div class="split">
+          <div class="field">
+            <label for="spanColor">Color de span</label>
+            <input id="spanColor" type="color" value="#64748b">
+          </div>
+          <div class="field">
+            <label for="spanSize">Tamaño de span (px)</label>
+            <input id="spanSize" type="number" min="9" max="22" step="1" value="13">
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Acordeón 6: Bordes -->
+    <details class="style-accordion">
+      <summary>Color de Bordes</summary>
+      <div class="accordion-content">
+        <div class="field">
+          <label for="lineColor">Color de borde general (tablas y divisores)</label>
+          <input id="lineColor" type="color" value="#d8e0e8">
+        </div>
+      </div>
+    </details>
+
+    <!-- Acordeón 7: Estilo de Tablas -->
+    <details class="style-accordion">
+      <summary>Estilo de Tablas</summary>
+      <div class="accordion-content">
+        <div class="split">
+          <div class="field">
+            <label for="tableHeaderBg">Fondo de encabezado</label>
+            <input id="tableHeaderBg" type="color" value="#1d4ed8">
+          </div>
+          <div class="field">
+            <label for="tableHeaderText">Texto de encabezado</label>
+            <input id="tableHeaderText" type="color" value="#ffffff">
+          </div>
+        </div>
+        <div class="split">
+          <div class="field">
+            <label for="tableCellBg">Fondo de celdas</label>
+            <input id="tableCellBg" type="color" value="#ffffff">
+          </div>
+          <div class="field">
+            <label for="tableCellText">Texto de celdas</label>
+            <input id="tableCellText" type="color" value="#111827">
+          </div>
+        </div>
+        <div class="field">
+          <label for="tableFontSize">Tamaño de letra (px)</label>
+          <input id="tableFontSize" type="number" min="9" max="20" step="1" value="13">
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= SECCIÓN PÁGINA 1 ================= -->
+  <section id="sec-pag1" class="group tab-content" style="background: rgba(0,0,0,0.02); padding: 12px; border-radius: 8px; border-left: 4px solid #1d4ed8;">
+    <h2 class="group-title" style="color: #1d4ed8;">Portada</h2>
+    <div class="field">
+      <label for="companyLogoUpload">Logo de la empresa (esquina superior derecha)</label>
+      <input id="companyLogoUpload" type="file" accept="image/logo">
+    </div>
+    <div class="field">
+      <label for="coverImageSelect">Imagen de portada (izquierda)</label>
+      <select id="coverImageSelect">
+        <option value="media/logo.png">Logo</option>
+        <option value="media/image1.png">Diseño 1</option>
+        <option value="media/image2.png">Diseño 2</option>
+        <option value="media/image3.png">Diseño 3</option>
+        <option value="media/image4.png">Diseño 4</option>
+        <option value="media/image5.png">Diseño 5</option>
+        <option value="media/image6.png">Diseño 6</option>
+        <option value="media/image7.png">Diseño 7</option>
+        <option value="media/image8.png">Diseño 8</option>
+        <option value="media/image9.png">Diseño 9</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="reportTitle">Título</label>
+      <input id="reportTitle" value="Informe Auditoría Operativa">
+    </div>
+    <div class="split">
+      <div class="field">
+        <label for="reportDate">Fecha</label>
+        <input id="reportDate" value="28 de agosto de 2026">
+      </div>
+      <div class="field">
+        <label for="reportNumber">Número</label>
+        <input id="reportNumber" value="No. INFORME: OP-2026-020">
+      </div>
+    </div>
+    <div class="field">
+      <label for="processes">Procesos evaluados</label>
+      <textarea id="processes">Comercial, Administrativo, Juridico, Gestión Humana, Cumplimiento, TIC</textarea>
+    </div>
+    <div class="field">
+      <label for="directors">Directores</label>
+      <textarea id="directors">Camilo Rodríguez, Paola Villamizar, Francisco Melendéz, Janeth Martínez, Katty Martínez, Maira Echeverry, Luis Osorio.</textarea>
+    </div>
+    <div class="field">
+      <label for="objective">Objetivo</label>
+      <textarea id="objective">Presentar los resultados semanales de la evaluación realizada, resaltando avances, novedades y asuntos que requieren gestión directiva.</textarea>
+    </div>
+    <div class="field">
+      <label for="scope">Alcance</label>
+      <textarea id="scope">La revisión comprende las visitas, soportes, procesos y novedades identificadas durante la semana reportada.</textarea>
+    </div>
+    <div class="field">
+  <label for="elaboradoPor">Elaborado por</label>
+  <input id="elaboradoPor" value="Elaborado por: Nombre Apellido">
+    </div>
+
+    <!-- Acordeón: Colores y Fondo exclusivos de la Portada -->
+    <details class="style-accordion">
+      <summary>Colores y Fondo de la Portada</summary>
+      <div class="accordion-content">
+        <div class="split">
+          <div class="field">
+            <label for="coverTitleColor">Color de título</label>
+            <input id="coverTitleColor" type="color" value="#ffffff">
+          </div>
+          <div class="field">
+            <label for="coverParagraphColor">Color de párrafos</label>
+            <input id="coverParagraphColor" type="color" value="#e6edff">
+          </div>
+        </div>
+        <div class="split">
+          <div class="field">
+            <label for="coverBgColor">Color de fondo (inicio)</label>
+            <input id="coverBgColor" type="color" value="#1d4ed8">
+          </div>
+          <div class="field">
+            <label for="coverBgColor2">Color de fondo (final)</label>
+            <input id="coverBgColor2" type="color" value="#1d4ed8">
+          </div>
+        </div>
+        <div class="field">
+          <label for="coverWaveStyle">Estilo de fondo / onda</label>
+          <select id="coverWaveStyle">
+            <option value="wave-soft">Onda suave</option>
+            <option value="wave-strong" selected>Onda pronunciada</option>
+            <option value="wave-double">Doble onda</option>
+            <option value="diagonal">Diagonal</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="coverObjectiveColor">Color del texto de Objetivo</label>
+          <input id="coverObjectiveColor" type="color" value="#e6edff">
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= SECCIÓN PÁGINA 2 ================= -->
+  <section id="sec-pag2" class="group tab-content" style="background: rgba(0,0,0,0.02); padding: 12px; border-radius: 8px; border-left: 4px solid #0f766e; margin-top: 15px;">
+    <h2 class="group-title" style="color: #0f766e;">Aspectos Evaluados</h2>
+
+    <div style="margin-bottom: 15px;">
+      <div id="aspectEditors"></div>
+    </div>
+
+    <div class="field">
+  <label for="intermediateTitleInput">Título Intermedio</label>
+  <input id="intermediateTitleInput" value="Novedades de efectivo. R. Alto. P-Comercial">
+    </div>
+
+    <div style="display: grid; gap: 16px; margin-bottom: 20px;">
+      
+      <!-- Campos Tarjeta 1: Visitas -->
+      <div style="background: rgba(255,255,255,0.5); padding: 10px; border: 1px dashed var(--line); border-radius: 8px;">
+        <label style="color: var(--accent); display: block; margin-bottom: 8px;">1. Métrica de Visitas</label>
+        <div class="field"><label>Título</label><input id="visitsTitle" value="Visitas realizadas"></div>
+        <div class="field"><label>Número de visitas</label><input id="visits" value="8"></div>
+        <div class="field"><label>Subtítulo</label><input id="visitsSub" value="visitas en distintas zonas"></div>
+      </div>
+
+      <!-- Campos Tarjeta 2: Monto -->
+      <div style="background: rgba(255,255,255,0.5); padding: 10px; border: 1px dashed var(--line); border-radius: 8px;">
+        <label style="color: var(--accent); display: block; margin-bottom: 8px;">2. Métrica de Monto</label>
+        <div class="field"><label>Título</label><input id="amountTitle" value="Monto evaluado"></div>
+        <div class="field"><label>Número de dinero</label><input id="amount" value="$ 1.250"></div>
+        <div class="field"><label>Subtítulo</label><input id="amountSub" value="millones de pesos"></div>
+      </div>
+
+      <!-- Campos Tarjeta 3: Novedades -->
+      <div style="background: rgba(255,255,255,0.5); padding: 10px; border: 1px dashed var(--line); border-radius: 8px;">
+        <label style="color: var(--accent); display: block; margin-bottom: 8px;">3. Detalle de Novedad</label>
+        <div class="field"><label>Título</label><input id="noveltyTitle" value="Detalle de la novedad"></div>
+        <div class="field"><label>Texto Principal</label><textarea id="novelty">Se evidenció oportunidad de mejora en la consistencia de los soportes y en la documentación de cierres parciales.</textarea></div>
+      </div>
+    </div>
+
+    <!-- Controles de la Alerta (DINÁMICO) -->
+    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed rgba(15, 118, 110, 0.3);">
+      <h3 style="font-size: 0.95rem; margin-bottom: 12px; color: #333;">Detalles de las Alertas</h3>
+      <button class="btn btn-secondary" id="addAlertBtn" type="button" style="width: 100%; padding: 8px; margin-bottom: 12px; font-size: 13px;">+ Agregar Nueva Alerta</button>
+      <div id="alertsSidebarGrid" style="display: grid; gap: 16px;"></div>
+    </div>
+
+  </section>
+
+  <!-- ================= SECCIÓN PÁGINA 3 ================= -->
+  <section id="sec-pag3" class="group tab-content" style="background: rgba(0,0,0,0.02); padding: 12px; border-radius: 8px; border-left: 4px solid #8a3ffc; margin-top: 15px;">
+    <h2 class="group-title" style="color: #8a3ffc;">Tangibles</h2>
+
+    <!-- Toggle para incluir/excluir la página 3 completa (Opcional, como la Página 6) -->
+    <div class="field" style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed rgba(138, 63, 252, 0.3);">
+      <input type="checkbox" id="page3Toggle" checked style="width: 20px; height: 20px;">
+      <label for="page3Toggle" style="margin: 0; cursor: pointer;">Incluir Página 3 en el informe</label>
+    </div>
+
+    <div id="page3ControlsWrap">
+      <!-- Título editable de la página -->
+      <div class="field" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed rgba(138, 63, 252, 0.3);">
+        <label for="page3HeaderTitleInput">Título de la Página</label>
+        <input id="page3HeaderTitleInput" value="Raspas Faltantes">
+      </div>
+
+      <!-- Controles del Banner de 4 Columnas (DINÁMICO) -->
+      <div>
+        <h3 style="font-size: 0.95rem; margin-bottom: 12px; color: #333;">Indicador</h3>
+        <button class="btn btn-secondary" id="addBannerBtn" type="button" style="width: 100%; padding: 8px; margin-bottom: 12px; font-size: 13px;">+ Agregar Nuevo Banner</button>
+        <div id="bannerSidebarGrid" style="display: grid; gap: 16px;"></div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= SECCIÓN PÁGINA 4 ================= -->
+  <section id="sec-pag4" class="group tab-content" style="background: rgba(0,0,0,0.02); padding: 12px; border-radius: 8px; border-left: 4px solid #ef4444; margin-top: 15px;">
+    <div class="panel-section">
+      <h2 class="group-title" style="color: #ef4444;">Evidencias</h2>
+      
+      <div id="dynamicEvidencesSidebarContainer"></div>
+      
+      <button class="btn" id="addDynamicEvidencePageBtn" type="button" style="width: 100%; margin-top: 10px; background: #fee2e2; color: #ef4444; border: 1px solid #ef4444;">
+        + Agregar Nueva Página de Evidencias
+      </button>
+    </div>
+  </section>
+
+  <!-- ================= SECCIÓN PÁGINA 5 ================= -->
+  <section id="sec-pag5" class="group tab-content" style="background: rgba(0,0,0,0.02); padding: 12px; border-radius: 8px; border-left: 4px solid #cde403; margin-top: 15px;">
+    <div class="panel-section">
+    <h2 class="group-title" style="color: #1100ff;">Tablas de Novedades</h2>
+    <div id="dynamicPagesSidebarContainer"></div>
+    <button class="btn" id="addDynamicPageBtn" type="button" style="width: 100%; margin-top: 10px;">
+      + Agregar Nueva Página de Tablas
+    </button>
+    </div>
+  </section>
+
+<!-- ================= SECCIÓN PÁGINA 6 ================= -->
+  <section id="sec-pag6" class="group tab-content" style="background: rgba(0,0,0,0.02); padding: 12px; border-radius: 8px; border-left: 4px solid #10b981; margin-top: 15px;">
+    <div class="panel-section">
+      <h2 class="group-title" style="color: #10b981;">Tabla Libre (Opcional)</h2>
+      <div id="page6SidebarContainer"></div>
+      
+    </div>
+  </section>
+
+  <!-- ================= SECCIÓN PÁGINA 7 (RECOMENDACIONES) ================= -->
+  <section id="sec-pag7" class="group tab-content" style="background: rgba(0,0,0,0.02); padding: 12px; border-radius: 8px; border-left: 4px solid #f97316; margin-top: 15px;">
+    <div class="panel-section">
+      <h2 class="group-title" style="color: #f97316;">Recomendaciones</h2>
+      <div id="page7SidebarContainer"></div>
+    </div>
+  </section>
+
+  <!-- Actions -->
+  <div class="actions" style="margin-top: 20px;">
+    <button class="btn btn-secondary" id="sample" type="button">Cargar ejemplo</button>
+    <button class="btn btn-primary" id="print" type="button">Generar PDF</button>
+  </div>
+</aside>
+
+    <section class="stage" aria-label="Vista previa">
+      <div class="deck theme-boardroom" id="deck">
+        
+        <article class="page cover-page wave-strong" id="coverPage">
+
+          <img id="previewCompanyLogo" class="cover-company-logo" src="media/logo.png" alt="Logo de la empresa">
+
+          <div class="cover-top">
+            <div class="cover-image-wrap">
+              <div class="cover-square-image" id="previewCoverImage" role="img" aria-label="Imagen de portada" style="background-image:url('media/image2.png');"></div>
+            </div>
+            <div class="cover-header-text">
+              <p class="cover-meta">
+                <strong id="previewReportNumber"></strong> | <strong id="previewReportDate"></strong>
+              </p>
+              <h2 class="cover-title" id="previewReportTitle"></h2>
+              <p class="cover-elaborado" id="previewElaboradoPor"></p>
+              <div class="cover-objective-block">
+                <h3>Objetivo</h3>
+                <p class="cover-objective-text" id="previewObjective"></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="cover-grid cover-grid-3">
+        <!-- Tarjeta 1: Procesos -->
+        <div class="card polaroid-kpi">
+          <div class="kpi-header">
+            <!-- Ícono de engranaje -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <h3>Procesos</h3>
+          </div>
+          <p class="card-value" id="previewProcesses"></p>
+        </div>
+
+        <!-- Tarjeta 2: Directores -->
+        <div class="card polaroid-kpi">
+          <div class="kpi-header">
+            <!-- Ícono de usuarios -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <h3>Directores</h3>
+          </div>
+          <div class="card-value" id="previewDirectors"></div>
+        </div>
+
+        <!-- Tarjeta 3: Alcance -->
+        <div class="card polaroid-kpi">
+          <div class="kpi-header">
+            <!-- Ícono de alcance -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 12 12 17 22 12"></polyline><polyline points="2 17 12 22 22 17"></polyline></svg>
+            <h3>Alcance</h3>
+          </div>
+          <p class="card-value" id="previewScope"></p>
+        </div>
+      </div>
+        </article>
+
+
+        <article class="page page-aspects" id="page2Preview">
+          <header class="section-head">
+            <div>
+              <h2 class="section-title">Aspectos evaluados</h2>
+            </div>
+          </header>
+
+          <div class="aspect-grid" id="aspectPreview"></div>
+
+          <div class="page2-layout">
+
+              <div class="intermediate-title-container">
+                <h3 class="intermediate-title" id="previewIntermediateTitle">Detalle Operativo y Métricas Globales</h3>
+              </div>
+
+              <div class="mini-grid">
+                <!-- Tarjeta 1 -->
+                <div class="mini-card">
+                  <div class="mini-header">
+                    <!-- Ícono de Ubicación -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <h3 id="previewVisitsTitle">Visitas realizadas</h3>
+                  </div>
+                  <strong class="mini-value" id="previewVisits">8</strong>
+                  <span class="mini-subtext" id="previewVisitsSub">visitas en distintas zonas</span>
+                </div>
+
+                <!-- Tarjeta 2 -->
+                <div class="mini-card">
+                  <div class="mini-header">
+                    <!-- Ícono de Dinero -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    <h3 id="previewAmountTitle">Monto evaluado</h3>
+                  </div>
+                  <strong class="mini-value" id="previewAmount">$ 1.250</strong>
+                  <span class="mini-subtext" id="previewAmountSub">millones de pesos</span>
+                </div>
+
+                <!-- Tarjeta 3 -->
+                <div class="mini-card">
+                  <div class="mini-header">
+                    <!-- Ícono de Alerta -->
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <h3 id="previewNoveltyTitle">Detalle de la novedad</h3>
+                  </div>
+                  <p class="mini-text" id="previewNovelty">Se evidenció oportunidad de mejora en la consistencia de los soportes...</p>
+                </div>
+              </div>
+
+              <!--FILA INFERIOR: ALERTAS -->
+              <div class="page2-bottom-row" id="page2BottomRow">
+                <div id="alertsPreviewContainer" style="display: flex; flex-direction: column; gap: 15px;"></div>
+              </div>
+
+          </div>
+
+        </article>
+       
+        <article class="page" id="page3Preview">
+          <header class="section-head">
+            <div>
+              <h2 class="section-title" id="page3HeaderTitlePreview">Faltantes Tangibles</h2>
+            </div>
+          </header>
+          <div id="bannerPreviewContainer" style="display: flex; flex-direction: column; gap: 15px;"></div>
+        </article>
+
+
+      <div id="dynamicEvidencesDeckContainer"></div>
+      <div id="dynamicPagesDeckContainer"></div>
+      <div id="page6DeckContainer"></div>
+      <div id="page7DeckContainer"></div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
