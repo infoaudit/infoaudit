@@ -261,7 +261,7 @@ document.getElementById("fontChoice").addEventListener("change", event => {
     syncAll();
   });
 
-  // --- PDF GENERATION ---
+  // --- GENERACIÓN DE PDF ---
   document.getElementById("print").addEventListener("click", async () => {
     syncAll();
 
@@ -399,10 +399,6 @@ const bgImageSelect = document.getElementById("pageBackgroundImage");
       applyCustomBackground(event.target.files[0]);
     });
   }
-
-  // ===== Imagen / Diseño de la Portada (Página 1) =====
-  // Ahora se elige desde un menú desplegable con diseños ya cargados en el servidor
-  // (carpeta media/), en lugar de subir un archivo desde el equipo.
 
   // ===== Logo de la empresa (esquina superior derecha de la portada) =====
   const companyLogoUpload = document.getElementById("companyLogoUpload");
@@ -554,7 +550,7 @@ const bgImageSelect = document.getElementById("pageBackgroundImage");
       alertsSidebarGrid.appendChild(editor);
     });
 
-    //  Ocultar el botón si ya hay 2 alertas
+    //  Ocultar el botón si ya hay 3 alertas
     const addBtn = document.getElementById("addAlertBtn");
     if (addBtn) {
       if (alertsData.length >= 3) {
@@ -1161,10 +1157,6 @@ function renderDynSidebar() {
       const gridContainer = document.createElement("div");
       gridContainer.className = "grid-page-container";
 
-      // El grid muestra las tablas de a 2 por fila (izquierda/derecha).
-      // Para que ambas tarjetas de una misma fila queden con la misma
-      // altura, calculamos cuántas filas tiene la tabla más larga de
-      // cada pareja y rellenamos la más corta con filas invisibles.
       const rowsPerPair = 2;
       const maxRowsByPair = [];
       page.tables.forEach((table, tIdx) => {
@@ -1207,8 +1199,6 @@ function renderDynSidebar() {
           tbody.appendChild(tr);
         });
 
-        // Filas de relleno (invisibles) para igualar la altura con la
-        // tabla vecina de la misma fila del grid.
         const pairIdx = Math.floor(tIdx / rowsPerPair);
         const fillerCount = (maxRowsByPair[pairIdx] || 0) - table.rows.length;
         for (let f = 0; f < fillerCount; f++) {

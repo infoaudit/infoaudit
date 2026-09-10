@@ -480,25 +480,6 @@ input:focus, textarea:focus, select:focus {
   pointer-events: none;
 }
 
-/* Onda suave: transición amplia y discreta */
-.cover-page.wave-soft::before {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1122' height='794' viewBox='0 0 1122 794' preserveAspectRatio='none'><path d='M0,520 C220,470 340,560 561,520 C800,478 900,560 1122,510 L1122,794 L0,794 Z' fill='white'/></svg>");
-}
-
-/* Onda pronunciada (por defecto): curva S más marcada, más "wave" */
-.cover-page.wave-strong::before {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1122' height='794' viewBox='0 0 1122 794' preserveAspectRatio='none'><path d='M0,470 C190,380 330,600 561,500 C790,400 940,620 1122,480 L1122,794 L0,794 Z' fill='white'/></svg>");
-}
-
-/* Doble onda: dos crestas para un fondo más dinámico */
-.cover-page.wave-double::before {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1122' height='794' viewBox='0 0 1122 794' preserveAspectRatio='none'><path d='M0,500 C140,440 220,560 374,520 C500,480 580,600 748,520 C880,460 980,580 1122,500 L1122,794 L0,794 Z' fill='white'/></svg>");
-}
-
-/* Diagonal: corte recto para un estilo más sobrio */
-.cover-page.diagonal::before {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1122' height='794' viewBox='0 0 1122 794' preserveAspectRatio='none'><path d='M0,560 L1122,420 L1122,794 L0,794 Z' fill='white'/></svg>");
-}
 .cover-page::after {
   content: "";
   position: absolute;
@@ -1189,8 +1170,6 @@ input:focus, textarea:focus, select:focus {
   color: var(--table-cell-text);
 }
 
-/* Filas invisibles usadas solo para igualar la altura entre la tabla
-   izquierda y la derecha cuando tienen distinta cantidad de datos. */
 .dynamic-table-filler-row td {
   border-bottom: 1px solid transparent;
   color: transparent;
