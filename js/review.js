@@ -1,17 +1,3 @@
-// ============================================================
-// REVISIÓN EN VIVO (el admin aprueba antes de generar el PDF)
-// ------------------------------------------------------------
-// Usa Supabase Realtime en modo "Broadcast": los mensajes viajan
-// por WebSocket en vivo y NUNCA se guardan en ninguna tabla ni
-// base de datos. Si nadie está conectado, el mensaje simplemente
-// se pierde (no hay historial).
-//
-// Requiere que el usuario admin tenga en su "User Metadata"
-// (Authentication > Users > clic en el usuario > Edit user):
-//   { "role": "admin" }
-// Cualquier otro usuario se trata como editor normal.
-// ============================================================
-
 const REVIEW_CHANNEL_NAME = "review-session";
 let reviewChannel = null;
 let reviewInitialized = false;
