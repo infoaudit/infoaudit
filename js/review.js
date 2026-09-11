@@ -1,8 +1,29 @@
+// ============================================================
+// REVISIÓN EN VIVO (el admin aprueba antes de generar el PDF)
+// ------------------------------------------------------------
+// Usa Supabase Realtime en modo "Broadcast": los mensajes viajan
+// por WebSocket en vivo y NUNCA se guardan en ninguna tabla ni
+// base de datos. Si nadie está conectado, el mensaje simplemente
+// se pierde (no hay historial).
+//
+// Requiere que el usuario admin tenga en su "User Metadata"
+// (Authentication > Users > clic en el usuario > Edit user):
+//   { "role": "admin" }
+// Cualquier otro usuario se trata como editor normal.
+// ============================================================
+
 const REVIEW_CHANNEL_NAME = "review-session";
 let reviewChannel = null;
 let reviewInitialized = false;
 let isApproved = false;
 let editorTimerInterval = null;
+
+// Snapshot de la plantilla ORIGINAL del deck, tomado en cuanto carga el
+// script y antes de que cualquier editor lo modifique. Sirve para poder
+// devolver el panel del admin a su estado real por defecto (no a un
+// panel vacío) cuando el editor se desconecta.
+const defaultDeckHTML = document.getElementById("deck")?.innerHTML ?? "";
+const defaultDeckStyle = document.getElementById("deck")?.getAttribute("style") ?? "";
 
 function formatElapsed(ms) {
   const totalSec = Math.max(0, Math.floor(ms / 1000));
@@ -201,6 +222,23 @@ function initAdminReview(session) {
     if (timerEl) timerEl.textContent = "";
   }
 
+  // Se llama cuando el editor se desconecta: como nada se guarda en ningún
+  // lado (todo viaja por broadcast en vivo), lo correcto es limpiar también
+  // lo que el admin está viendo, para que no quede el último snapshot
+  // "congelado" en pantalla dando la impresión de que algo persistió.
+  function resetToDefaultView() {
+    deckEl.innerHTML = defaultDeckHTML;
+    if (defaultDeckStyle) {
+      deckEl.setAttribute("style", defaultDeckStyle);
+    } else {
+      deckEl.removeAttribute("style");
+    }
+    lastEditorEmail = null;
+    statusEl.textContent = "🔴 El editor se desconectó — vista por defecto restaurada";
+    approveBtn.disabled = true;
+    approveBtn.textContent = "Aprobar cambios";
+  }
+
   reviewChannel = supabaseClient.channel(REVIEW_CHANNEL_NAME, {
     config: {
       broadcast: { self: false },
@@ -226,7 +264,12 @@ function initAdminReview(session) {
     if (editorPresence) {
       if (!editorJoinedAt) startEditorTimer(editorPresence.joinedAt);
     } else {
+      // Ya no hay ningún editor en el canal (cerró sesión o se desconectó).
+      // Como nunca hubo estado guardado, lo correcto es limpiar la vista del
+      // admin en vez de dejar el último HTML recibido como si siguiera vigente.
+      const hadEditor = editorJoinedAt !== null;
       stopEditorTimer();
+      if (hadEditor) resetToDefaultView();
     }
   });
 
@@ -250,6 +293,10 @@ function initAdminReview(session) {
 // ---------------------- ARRANQUE ----------------------
 supabaseClient.auth.onAuthStateChange((_event, session) => {
   if (!session) {
+    // ¿Veníamos de una sesión activa? (distinto de la carga inicial de la
+    // página sin haber iniciado sesión todavía, donde no hay nada que limpiar).
+    const wasActiveSession = reviewInitialized;
+
     if (reviewChannel) {
       supabaseClient.removeChannel(reviewChannel);
       reviewChannel = null;
@@ -261,6 +308,15 @@ supabaseClient.auth.onAuthStateChange((_event, session) => {
     reviewInitialized = false;
     const bar = document.getElementById("reviewBar");
     if (bar) bar.remove();
+
+    // Recargamos la página al cerrar sesión: el deck y el formulario del
+    // sidebar (manejados por app.js) no se resetean solos, así que sin este
+    // reload el editor volvería a ver, en la misma pestaña, todo lo que
+    // había escrito antes de cerrar sesión — dando la falsa impresión de
+    // que algo quedó guardado. Nada persiste; solo faltaba limpiar el DOM.
+    if (wasActiveSession) {
+      window.location.reload();
+    }
     return;
   }
 

@@ -16,7 +16,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #0b1220;
+      background: #0b1220 url('media/background.png') center center / cover no-repeat;
       z-index: 9999;
       font-family: 'Segoe UI', Arial, sans-serif;
     }
@@ -29,15 +29,24 @@
       padding: 28px 26px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.35);
     }
+    #authGate .auth-icon {
+      display: block;
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 14px;
+      object-fit: contain;
+    }
     #authGate h1 {
       font-size: 20px;
       margin: 0 0 6px;
+      text-align: center;
       color: #0b1220;
     }
     #authGate p.auth-sub {
       margin: 0 0 20px;
       font-size: 13px;
       color: #6b7280;
+      text-align: center;
     }
     #authGate label {
       display: block;
@@ -104,6 +113,7 @@
   <!-- ================= PANTALLA DE LOGIN (Supabase Auth) ================= -->
   <div id="authGate">
     <div class="auth-card">
+      <img class="auth-icon" src="media/iconopdf.png" alt="InfoAudit">
       <h1>InfoAudit</h1>
       <p class="auth-sub">Ingresa con tu usuario autorizado</p>
       <form id="authForm">
