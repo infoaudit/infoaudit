@@ -3,16 +3,127 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>InfoAudit</title>
+  <title>Info-Audit</title>
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="icon" type="image/png" href="media/favicon.png">
+  <style>
+    #authGate {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0b1220;
+      z-index: 9999;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    #authGate.hidden { display: none; }
+    #authGate .auth-card {
+      width: 320px;
+      max-width: 90vw;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 28px 26px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    }
+    #authGate h1 {
+      font-size: 20px;
+      margin: 0 0 6px;
+      color: #0b1220;
+    }
+    #authGate p.auth-sub {
+      margin: 0 0 20px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+    #authGate label {
+      display: block;
+      font-size: 12px;
+      color: #374151;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    #authGate input {
+      width: 100%;
+      padding: 9px 10px;
+      margin-bottom: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    #authGate button#authSubmit {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #1d4ed8;
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    #authGate button#authSubmit:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    #authGate .auth-error {
+      color: #dc2626;
+      font-size: 12px;
+      margin: -6px 0 12px;
+      min-height: 14px;
+    }
+    #userBar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 6px 10px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      color: #374151;
+    }
+    #userBar button {
+      border: none;
+      background: #e5e7eb;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    #appMain.hidden { display: none; }
+  </style>
 </head>
 <body>
-  <main class="app">
+
+  <!-- ================= PANTALLA DE LOGIN (Supabase Auth) ================= -->
+  <div id="authGate">
+    <div class="auth-card">
+      <h1>Info-Audit</h1>
+      <p class="auth-sub">Ingresa con tu usuario autorizado</p>
+      <form id="authForm">
+        <label for="authEmail">Correo</label>
+        <input id="authEmail" type="email" autocomplete="username" required>
+        <label for="authPassword">Contraseña</label>
+        <input id="authPassword" type="password" autocomplete="current-password" required>
+        <div class="auth-error" id="authError"></div>
+        <button type="submit" id="authSubmit">Ingresar</button>
+      </form>
+    </div>
+  </div>
+
+  <main class="app hidden" id="appMain">
 <aside class="editor">
-  <h1>InfoAudit</h1>
+  <div id="userBar" style="display:none;">
+    <span id="userBarEmail"></span>
+    <button id="logoutBtn" type="button">Cerrar sesión</button>
+  </div>
+  <h1>Info-Audit</h1>
   <nav class="sidebar-tabs">
     <button class="tab-btn active" data-target="sec-estilos">Estilos</button>
     <button class="tab-btn" data-target="sec-pag1">Portada</button>
@@ -524,6 +635,7 @@
       </div>
         </article>
 
+
         <article class="page page-aspects" id="page2Preview">
           <header class="section-head">
             <div>
@@ -591,6 +703,7 @@
           <div id="bannerPreviewContainer" style="display: flex; flex-direction: column; gap: 15px;"></div>
         </article>
 
+
       <div id="dynamicEvidencesDeckContainer"></div>
       <div id="dynamicPagesDeckContainer"></div>
       <div id="page6DeckContainer"></div>
@@ -600,6 +713,8 @@
     </section>
   </main>
 
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/review.js"></script>
 </body>
 </html>

@@ -261,7 +261,7 @@ document.getElementById("fontChoice").addEventListener("change", event => {
     syncAll();
   });
 
-  // --- GENERACIÓN DE PDF ---
+  // --- PDF GENERATION ---
   document.getElementById("print").addEventListener("click", async () => {
     syncAll();
 
@@ -399,6 +399,10 @@ const bgImageSelect = document.getElementById("pageBackgroundImage");
       applyCustomBackground(event.target.files[0]);
     });
   }
+
+  // ===== Imagen / Diseño de la Portada (Página 1) =====
+  // Ahora se elige desde un menú desplegable con diseños ya cargados en el servidor
+  // (carpeta media/), en lugar de subir un archivo desde el equipo.
 
   // ===== Logo de la empresa (esquina superior derecha de la portada) =====
   const companyLogoUpload = document.getElementById("companyLogoUpload");
@@ -550,7 +554,7 @@ const bgImageSelect = document.getElementById("pageBackgroundImage");
       alertsSidebarGrid.appendChild(editor);
     });
 
-    //  Ocultar el botón si ya hay 3 alertas
+    //  Ocultar el botón si ya hay 2 alertas
     const addBtn = document.getElementById("addAlertBtn");
     if (addBtn) {
       if (alertsData.length >= 3) {
@@ -1157,6 +1161,10 @@ function renderDynSidebar() {
       const gridContainer = document.createElement("div");
       gridContainer.className = "grid-page-container";
 
+      // El grid muestra las tablas de a 2 por fila (izquierda/derecha).
+      // Para que ambas tarjetas de una misma fila queden con la misma
+      // altura, calculamos cuántas filas tiene la tabla más larga de
+      // cada pareja y rellenamos la más corta con filas invisibles.
       const rowsPerPair = 2;
       const maxRowsByPair = [];
       page.tables.forEach((table, tIdx) => {
@@ -1199,6 +1207,8 @@ function renderDynSidebar() {
           tbody.appendChild(tr);
         });
 
+        // Filas de relleno (invisibles) para igualar la altura con la
+        // tabla vecina de la misma fila del grid.
         const pairIdx = Math.floor(tIdx / rowsPerPair);
         const fillerCount = (maxRowsByPair[pairIdx] || 0) - table.rows.length;
         for (let f = 0; f < fillerCount; f++) {
@@ -1380,6 +1390,57 @@ function renderDynSidebar() {
         renderDynamicEvidences();
       };
       pageWrapper.appendChild(addEvBtn);
+
+      // Zona para pegar desde Excel: columna 1 = Punto de Venta, columna 2 = Novedad.
+      // Cada fila pegada crea automáticamente una fila de evidencia (igual que
+      // en la Tabla Libre), lista para que solo falte cargar la foto.
+      const evPasteZone = document.createElement("textarea");
+      evPasteZone.value = "";
+      evPasteZone.placeholder = "Pega aquí 2 columnas desde Excel: Punto de Venta y Novedad (Ctrl+V)";
+      evPasteZone.rows = 2;
+      evPasteZone.style.width = "100%";
+      evPasteZone.style.padding = "10px";
+      evPasteZone.style.border = "1px dashed #ef4444";
+      evPasteZone.style.borderRadius = "6px";
+      evPasteZone.style.marginBottom = "15px";
+      evPasteZone.style.boxSizing = "border-box";
+      evPasteZone.style.fontSize = "12px";
+      evPasteZone.style.color = "#64748b";
+      evPasteZone.style.resize = "vertical";
+      evPasteZone.onpaste = (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData("text");
+        if (!text || !text.trim()) return;
+
+        // Excel separa columnas con TAB y filas con salto de línea
+        let lines = text.replace(/\r/g, "").split("\n").filter(l => l.length > 0);
+        if (lines.length === 0) return;
+
+        let parsedRows = lines.map(line => line.split("\t"));
+
+        // Si la primera fila parece un encabezado ("Punto de Venta" / "Novedad"),
+        // se ignora para no crear una fila de evidencia vacía con esos títulos.
+        const firstCell = (parsedRows[0][0] || "").trim().toLowerCase();
+        const secondCell = (parsedRows[0][1] || "").trim().toLowerCase();
+        if (firstCell.includes("punto") || secondCell.includes("novedad")) {
+          parsedRows = parsedRows.slice(1);
+        }
+
+        const newEvidences = parsedRows
+          .filter(row => (row[0] || "").trim() || (row[1] || "").trim())
+          .map(row => ({
+            title: (row[0] || "").trim(),
+            desc: (row[1] || "").trim(),
+            imgUrls: [],
+          }));
+
+        if (newEvidences.length === 0) return;
+
+        page.evidences.push(...newEvidences);
+        evPasteZone.value = "";
+        renderDynamicEvidences();
+      };
+      pageWrapper.appendChild(evPasteZone);
 
       // Mini-formularios de cada fila de evidencia
       page.evidences.forEach((ev, evIndex) => {
