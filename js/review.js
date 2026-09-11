@@ -1,27 +1,9 @@
-// ============================================================
-// REVISIÓN EN VIVO (el admin aprueba antes de generar el PDF)
-// ------------------------------------------------------------
-// Usa Supabase Realtime en modo "Broadcast": los mensajes viajan
-// por WebSocket en vivo y NUNCA se guardan en ninguna tabla ni
-// base de datos. Si nadie está conectado, el mensaje simplemente
-// se pierde (no hay historial).
-//
-// Requiere que el usuario admin tenga en su "User Metadata"
-// (Authentication > Users > clic en el usuario > Edit user):
-//   { "role": "admin" }
-// Cualquier otro usuario se trata como editor normal.
-// ============================================================
-
 const REVIEW_CHANNEL_NAME = "review-session";
 let reviewChannel = null;
 let reviewInitialized = false;
 let isApproved = false;
 let editorTimerInterval = null;
 
-// Snapshot de la plantilla ORIGINAL del deck, tomado en cuanto carga el
-// script y antes de que cualquier editor lo modifique. Sirve para poder
-// devolver el panel del admin a su estado real por defecto (no a un
-// panel vacío) cuando el editor se desconecta.
 const defaultDeckHTML = document.getElementById("deck")?.innerHTML ?? "";
 const defaultDeckStyle = document.getElementById("deck")?.getAttribute("style") ?? "";
 
@@ -95,10 +77,6 @@ function initEditorReview(session) {
   }
   const sendSnapshotDebounced = debounce(sendSnapshot, 700);
 
-  // Observamos directamente la vista previa (#deck) en vez de escuchar solo
-  // "input"/"change" en el sidebar: agregar o eliminar tablas, banners o filas
-  // se hace con botones (click) que no disparan esos eventos, y así nos
-  // aseguramos de capturar CUALQUIER cambio real que vaya a terminar en el PDF.
   const deckObserver = new MutationObserver(() => {
     if (isApproved) setApproved(false);
     sendSnapshotDebounced();
@@ -119,10 +97,6 @@ function initEditorReview(session) {
   });
 
   reviewChannel.on("broadcast", { event: "approved" }, () => setApproved(true));
-
-  // El admin pide el estado actual explícitamente al conectarse (por ejemplo,
-  // tras cerrar sesión y volver a entrar). No dependemos solo de Presence
-  // porque su sincronización puede llegar tarde o perderse una vez.
   reviewChannel.on("broadcast", { event: "request_snapshot" }, () => sendSnapshot());
 
   reviewChannel.on("presence", { event: "sync" }, () => {
@@ -143,8 +117,6 @@ function initEditorReview(session) {
     }
   });
 
-  // Bloqueo adicional: aunque alguien fuerce el atributo "disabled" desde la
-  // consola, este listener en fase de captura sigue impidiendo el click real.
   printBtn.addEventListener(
     "click",
     (e) => {
@@ -162,8 +134,6 @@ function initAdminReview(session) {
   const aside = document.querySelector("#appMain aside.editor");
   if (aside) aside.style.display = "none";
 
-  // La vista previa (.stage) queda sola: la centramos y le damos aire
-  // en vez de dejarla pegada a la izquierda con espacio vacío.
   const stage = document.querySelector(".stage");
   if (stage) {
     stage.style.cssText +=
@@ -222,10 +192,6 @@ function initAdminReview(session) {
     if (timerEl) timerEl.textContent = "";
   }
 
-  // Se llama cuando el editor se desconecta: como nada se guarda en ningún
-  // lado (todo viaja por broadcast en vivo), lo correcto es limpiar también
-  // lo que el admin está viendo, para que no quede el último snapshot
-  // "congelado" en pantalla dando la impresión de que algo persistió.
   function resetToDefaultView() {
     deckEl.innerHTML = defaultDeckHTML;
     if (defaultDeckStyle) {
@@ -264,9 +230,6 @@ function initAdminReview(session) {
     if (editorPresence) {
       if (!editorJoinedAt) startEditorTimer(editorPresence.joinedAt);
     } else {
-      // Ya no hay ningún editor en el canal (cerró sesión o se desconectó).
-      // Como nunca hubo estado guardado, lo correcto es limpiar la vista del
-      // admin en vez de dejar el último HTML recibido como si siguiera vigente.
       const hadEditor = editorJoinedAt !== null;
       stopEditorTimer();
       if (hadEditor) resetToDefaultView();
@@ -283,8 +246,6 @@ function initAdminReview(session) {
   reviewChannel.subscribe(async (status) => {
     if (status === "SUBSCRIBED") {
       await reviewChannel.track({ role: "admin" });
-      // Pide de inmediato el estado actual: cubre el caso de reconexión
-      // (cerrar sesión y volver a entrar) sin depender solo de Presence.
       reviewChannel.send({ type: "broadcast", event: "request_snapshot", payload: {} });
     }
   });
@@ -293,8 +254,6 @@ function initAdminReview(session) {
 // ---------------------- ARRANQUE ----------------------
 supabaseClient.auth.onAuthStateChange((_event, session) => {
   if (!session) {
-    // ¿Veníamos de una sesión activa? (distinto de la carga inicial de la
-    // página sin haber iniciado sesión todavía, donde no hay nada que limpiar).
     const wasActiveSession = reviewInitialized;
 
     if (reviewChannel) {
@@ -309,11 +268,6 @@ supabaseClient.auth.onAuthStateChange((_event, session) => {
     const bar = document.getElementById("reviewBar");
     if (bar) bar.remove();
 
-    // Recargamos la página al cerrar sesión: el deck y el formulario del
-    // sidebar (manejados por app.js) no se resetean solos, así que sin este
-    // reload el editor volvería a ver, en la misma pestaña, todo lo que
-    // había escrito antes de cerrar sesión — dando la falsa impresión de
-    // que algo quedó guardado. Nada persiste; solo faltaba limpiar el DOM.
     if (wasActiveSession) {
       window.location.reload();
     }
