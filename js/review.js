@@ -49,16 +49,11 @@ function initEditorReview(session) {
   `;
   const statusEl = () => document.getElementById("reviewStatus");
 
-  printBtn.disabled = true;
-  printBtn.title = "Debes obtener la aprobación del admin antes de generar el PDF";
-
   function setApproved(value) {
     isApproved = value;
-    printBtn.disabled = !value;
-    printBtn.title = value ? "" : "Debes obtener la aprobación del admin antes de generar el PDF";
     if (statusEl()) {
       statusEl().textContent = value
-        ? "✅ Aprobado por el admin — puedes generar el PDF"
+        ? "✅ Aprobado por el admin"
         : "🟡 Esperando aprobación del admin…";
     }
   }
@@ -116,17 +111,6 @@ function initEditorReview(session) {
       sendSnapshot();
     }
   });
-
-  printBtn.addEventListener(
-    "click",
-    (e) => {
-      if (!isApproved) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-      }
-    },
-    true
-  );
 }
 
 // ---------------------- MODO ADMIN ----------------------
