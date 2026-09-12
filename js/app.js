@@ -34,28 +34,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const samples = {
     reportTitle: "Informe Auditoria Operativa",
-    reportDate: "28 de agosto de 2026",
-    reportNumber: "No. INFORME: OP-2026-020",
+    reportDate: "12 de septiembre de 2026",
+    reportNumber: "No. INFORME: OP-2026-023",
     processes: "Comercial,\nAdministrativo,\nJuridico,\nGestión Humana,\nCumplimiento\nTIC",
     directors: "Camilo Rodríguez, Paola Villamizar, Francisco Melendéz, Janeth Martínez, Katty Martínez, Maira Echeverry, Luis Osorio.",
     objective: "Presentar los resultados semanales de la evaluación realizada, resaltando avances, novedades y asuntos que requieren gestión directiva.",
-    scope: "La revisión comprende las visitas, soportes, procesos y novedades identificadas durante la semana reportada.",
-    elaboradoPor: "Elaborado por: Nombre Apellido",
+    scope: "La revisión comprende las visitas, soportes, procesos y novedades identificadas durante la revisión 07 al 11 de septiembre del 2026.",
+    elaboradoPor: "Elaborado por: Keila Escobar",
     visitsTitle: "Visitas realizadas",
-    visits: "8",
+    visits: "40",
     visitsSub: "visitas en distintas zonas",
     amountTitle: "Monto evaluado",
-    amount: "$ 1.250",
+    amount: "$ 184.716",
     amountSub: "millones de pesos",
     noveltyTitle: "Detalle de la novedad",
-    novelty: "Se evidenció oportunidad de mejora en la consistencia de los soportes y en la documentación de cierres parciales.",
+    novelty: "Faltante físico de efectivo del día 09-09-2026.",
     intermediateTitleInput: "Novedades de efectivo. R. Alto. P-Comercial",
     alertTitle: "NOVEDAD IDENTIFICADA",
-    alertSubtitle: "Sobrante por",
-    alertAmount: "$11.599.470",
+    alertSubtitle: "Faltante por",
+    alertAmount: "$100.000",
     userRole: "ASESORA DE COMISIÓN",
-    userName: "MARIA SUESCUN",
-    userId: "CC 12345678"
+    userName: "ALICIA MARTINEZ",
+    userId: "CC 37444096"
   };
 
   function setReportVar(name, value) {
@@ -259,6 +259,84 @@ document.getElementById("fontChoice").addEventListener("change", event => {
     ];
     renderAspectEditors();
     syncAll();
+
+    // Restaura también la alerta, los faltantes tangibles y las páginas de evidencia del ejemplo
+    alertsData = [
+      {
+        alertTitle: "NOVEDAD IDENTIFICADA",
+        alertSubtitle: "Faltante por",
+        alertAmount: "$100.000",
+        alertNote: "",
+        userRole: "ASESORA DE COMISIÓN",
+        userName: "ALICIA MARTINEZ",
+        userId: "CC 37444096"
+      }
+    ];
+    renderAlertsData();
+
+    bannerData = [
+      {
+        puntoNum: "8305", puntoName: "LA PARADA 2",
+        userRole: "ASESORA DE COMISIÓN", userName: "Edgar Parra", userId: "CC 1007552672",
+        faltanteNum: "20", faltanteType: "RASPAS", valor: "$45.000"
+      },
+      {
+        puntoNum: "8333", puntoName: "LA ESPIGA",
+        userRole: "ASESOR DE COMISION", userName: "Fernanda García", userId: "CC 1081794805",
+        faltanteNum: "16", faltanteType: "RASPAS", valor: "$38.000"
+      },
+      {
+        puntoNum: "8326", puntoName: "TRIGAL DEL NORTE-PG",
+        userRole: "ASESORA DE COMISION", userName: "Neivis Bermudes", userId: "CC 1090470824",
+        faltanteNum: "9", faltanteType: "RASPAS", valor: "$20.000"
+      },
+      {
+        puntoNum: "9331", puntoName: "CDA LOS PATIOS",
+        userRole: "INVENTARIO RASPAS CDA", userName: "", userId: "",
+        faltanteNum: "250", faltanteType: "RASPAS", valor: "$600.000"
+      },
+      {
+        puntoNum: "8191", puntoName: "MIRAFLORES",
+        userRole: "ASESORA DE COMISION", userName: "Anyela Ureña", userId: "1090459019",
+        faltanteNum: "13", faltanteType: "RASPAS", valor: "$35.000"
+      },
+      {
+        puntoNum: "8184", puntoName: "",
+        userRole: "ASESORA DE COMISION", userName: "Leni Arguello", userId: "CC 1093774441",
+        faltanteNum: "19", faltanteType: "RASPAS", valor: "$66.000"
+      }
+    ];
+    renderBannerData();
+
+    dynamicEvidencePages = [
+      {
+        id: "ev_page_1",
+        title: "MANEJO INADECUADO DE ACTIVOS FIJOS. R. MEDIO. P ADMINISTRATIVO",
+        evidences: [
+          { title: "9477 LA PALMITA 3", desc: "Se evidenció un televisor apagado, asociado a la falta de programación.", imgUrls: [] },
+          { title: "9151 LA PALMITA 2", desc: "Existencia de 4 equipos y 1 televisor destinados a BetPlay que se encuentran sin uso.", imgUrls: [] },
+          { title: "8313 PUENTE SIMON BOLIVAR", desc: "Existencia de 2 equipos y 1 televisor destinados a BetPlay que se encuentran sin uso.", imgUrls: [] },
+          { title: "8108 COLPET", desc: "Se evidenció un televisor que permanece apagado y no cuenta con control remoto.", imgUrls: [] },
+          { title: "9380 COMPUMUEBLE EL REGALO", desc: "Se evidenció un compumueble que cuenta con todos sus elementos y equipos disponibles, pero no tiene una persona asignada para su uso.", imgUrls: [] },
+          { title: "8191 MIRAFLORES-PG", desc: "Se evidenciaron dos equipos fuera de uso y un counter dotado con todos sus elementos, sin una asesora asignada para su utilización. Adicionalmente, se observó acumulación de polvo y suciedad en los elementos dispuestos en el lugar.", imgUrls: [] },
+          { title: "8421 NIZA TRES", desc: "Se identificó un televisor fuera de uso, sin programación ni conexión a internet, lo que impide su utilización.", imgUrls: [] },
+          { title: "8406 NIZA EXPRESS-PG", desc: "Se evidenció un televisor fuera de uso, lo que impide la proyección de resultados y demás información requerida para su finalidad.", imgUrls: [] },
+          { title: "8173 LA SUERTE", desc: "Se evidenció que el televisor asignado a BetPlay permanece apagado y fuera de uso.", imgUrls: [] }
+        ]
+      },
+      {
+        id: "ev_page_2",
+        title: "ASPECTOS DE INFRAESTRUCTURA. R. MEDIO. P ADMINISTRATIVO",
+        evidences: [
+          { title: "8173 LA SUERTE", desc: "Se evidenció deterioro de la pared, asociado a presencia de humedad, afectando las condiciones físicas del inmueble.", imgUrls: [] },
+          { title: "8398 VICTORIA PLAZA", desc: "Se evidenció que el buzón de sugerencias y el billetero presentan deterioro / no cierran adecuadamente.", imgUrls: [] },
+          { title: "8191 MIRAFLORES", desc: "Se evidenció filtración de humedad en la caja fuerte, ocasionando que los billetes almacenados en su interior se humedezcan.", imgUrls: [] },
+          { title: "9331 CDA LOS PATIOS", desc: "Se evidenció que el billetero no cierra completamente, afectando su adecuado funcionamiento y seguridad.", imgUrls: [] },
+          { title: "9477 LA PALMITA 3", desc: "Se evidenció cableado eléctrico expuesto y presencia de filtraciones de humedad en las paredes del inmueble.", imgUrls: [] }
+        ]
+      }
+    ];
+    renderDynamicEvidences();
   });
 
   // --- PDF GENERATION ---
@@ -488,12 +566,12 @@ const bgImageSelect = document.getElementById("pageBackgroundImage");
   let alertsData = [
     {
       alertTitle: "NOVEDAD IDENTIFICADA",
-      alertSubtitle: "Sobrante por",
-      alertAmount: "$11.599.470",
+      alertSubtitle: "Faltante por",
+      alertAmount: "$100.000",
       alertNote: "",
       userRole: "ASESORA DE COMISIÓN",
-      userName: "MARIA  SUESCUN",
-      userId: "CC 1234567"
+      userName: "ALICIA MARTINEZ",
+      userId: "CC 37444096"
     }
   ];
 
@@ -629,9 +707,34 @@ const bgImageSelect = document.getElementById("pageBackgroundImage");
   // --- LÓGICA DE BANNERS DINÁMICOS (Página 3) ---
   let bannerData = [
     {
-      puntoNum: "1234", puntoName: "LOS COMUNEROS",
-      userRole: "ASESORA DE COMISIÓN", userName: "ANDREA CASTELLANOS", userId: "CC 12345678",
-      faltanteNum: "67", faltanteType: "RASPAS", valor: "$155.000"
+      puntoNum: "8305", puntoName: "LA PARADA 2",
+      userRole: "ASESORA DE COMISIÓN", userName: "Edgar Parra", userId: "CC 1007552672",
+      faltanteNum: "20", faltanteType: "RASPAS", valor: "$45.000"
+    },
+    {
+      puntoNum: "8333", puntoName: "LA ESPIGA",
+      userRole: "ASESOR DE COMISION", userName: "Fernanda García", userId: "CC 1081794805",
+      faltanteNum: "16", faltanteType: "RASPAS", valor: "$38.000"
+    },
+    {
+      puntoNum: "8326", puntoName: "TRIGAL DEL NORTE-PG",
+      userRole: "ASESORA DE COMISION", userName: "Neivis Bermudes", userId: "CC 1090470824",
+      faltanteNum: "9", faltanteType: "RASPAS", valor: "$20.000"
+    },
+    {
+      puntoNum: "9331", puntoName: "CDA LOS PATIOS",
+      userRole: "INVENTARIO RASPAS CDA", userName: "", userId: "",
+      faltanteNum: "250", faltanteType: "RASPAS", valor: "$600.000"
+    },
+    {
+      puntoNum: "8191", puntoName: "MIRAFLORES",
+      userRole: "ASESORA DE COMISION", userName: "Anyela Ureña", userId: "1090459019",
+      faltanteNum: "13", faltanteType: "RASPAS", valor: "$35.000"
+    },
+    {
+      puntoNum: "8184", puntoName: "",
+      userRole: "ASESORA DE COMISION", userName: "Leni Arguello", userId: "CC 1093774441",
+      faltanteNum: "19", faltanteType: "RASPAS", valor: "$66.000"
     }
   ];
 
@@ -1321,10 +1424,29 @@ function renderDynSidebar() {
   // --- LÓGICA DE PÁGINAS DE EVIDENCIA DINÁMICAS (Página 4) ---
   let dynamicEvidencePages = [
     {
-      id: "ev_page_" + Date.now(),
+      id: "ev_page_1",
       title: "MANEJO INADECUADO DE ACTIVOS FIJOS. R. MEDIO. P ADMINISTRATIVO",
       evidences: [
-        { title: "Sobrante de caja", desc: "Se evidencia billete de 50.000 adicional fuera de la gaveta principal.", imgUrls: [] }
+        { title: "9477 LA PALMITA 3", desc: "Se evidenció un televisor apagado, asociado a la falta de programación.", imgUrls: [] },
+        { title: "9151 LA PALMITA 2", desc: "Existencia de 4 equipos y 1 televisor destinados a BetPlay que se encuentran sin uso.", imgUrls: [] },
+        { title: "8313 PUENTE SIMON BOLIVAR", desc: "Existencia de 2 equipos y 1 televisor destinados a BetPlay que se encuentran sin uso.", imgUrls: [] },
+        { title: "8108 COLPET", desc: "Se evidenció un televisor que permanece apagado y no cuenta con control remoto.", imgUrls: [] },
+        { title: "9380 COMPUMUEBLE EL REGALO", desc: "Se evidenció un compumueble que cuenta con todos sus elementos y equipos disponibles, pero no tiene una persona asignada para su uso.", imgUrls: [] },
+        { title: "8191 MIRAFLORES-PG", desc: "Se evidenciaron dos equipos fuera de uso y un counter dotado con todos sus elementos, sin una asesora asignada para su utilización. Adicionalmente, se observó acumulación de polvo y suciedad en los elementos dispuestos en el lugar.", imgUrls: [] },
+        { title: "8421 NIZA TRES", desc: "Se identificó un televisor fuera de uso, sin programación ni conexión a internet, lo que impide su utilización.", imgUrls: [] },
+        { title: "8406 NIZA EXPRESS-PG", desc: "Se evidenció un televisor fuera de uso, lo que impide la proyección de resultados y demás información requerida para su finalidad.", imgUrls: [] },
+        { title: "8173 LA SUERTE", desc: "Se evidenció que el televisor asignado a BetPlay permanece apagado y fuera de uso.", imgUrls: [] }
+      ]
+    },
+    {
+      id: "ev_page_2",
+      title: "ASPECTOS DE INFRAESTRUCTURA. R. MEDIO. P ADMINISTRATIVO",
+      evidences: [
+        { title: "8173 LA SUERTE", desc: "Se evidenció deterioro de la pared, asociado a presencia de humedad, afectando las condiciones físicas del inmueble.", imgUrls: [] },
+        { title: "8398 VICTORIA PLAZA", desc: "Se evidenció que el buzón de sugerencias y el billetero presentan deterioro / no cierran adecuadamente.", imgUrls: [] },
+        { title: "8191 MIRAFLORES", desc: "Se evidenció filtración de humedad en la caja fuerte, ocasionando que los billetes almacenados en su interior se humedezcan.", imgUrls: [] },
+        { title: "9331 CDA LOS PATIOS", desc: "Se evidenció que el billetero no cierra completamente, afectando su adecuado funcionamiento y seguridad.", imgUrls: [] },
+        { title: "9477 LA PALMITA 3", desc: "Se evidenció cableado eléctrico expuesto y presencia de filtraciones de humedad en las paredes del inmueble.", imgUrls: [] }
       ]
     }
   ];
